@@ -10,29 +10,31 @@ def show_menu():
 
 
 def add_task():
-    task = input("Enter your task: ")
+    task = input("Enter your task: ").strip()
 
-    if task.strip() == "":
-        print("Task cannot be empty.")
-    else:
+    if task:
         tasks.append(task)
         print("Task added successfully!")
+    else:
+        print("Task cannot be empty.")
 
 
 def view_tasks():
-    if len(tasks) == 0:
+    if not tasks:
         print("No tasks available.")
-    else:
-        print("\nYour Tasks:")
-        for i, task in enumerate(tasks, start=1):
-            print(f"{i}. {task}")
+        return
+
+    print("\nYour Tasks:")
+    for index, task in enumerate(tasks, 1):
+        print(f"{index}. {task}")
 
 
 def delete_task():
-    view_tasks()
-
-    if len(tasks) == 0:
+    if not tasks:
+        print("No tasks available.")
         return
+
+    view_tasks()
 
     try:
         task_number = int(input("Enter task number to delete: "))
@@ -48,27 +50,28 @@ def delete_task():
 
 
 def main():
+    actions = {
+        "1": add_task,
+        "2": view_tasks,
+        "3": delete_task
+    }
+
     while True:
         show_menu()
+        choice = input("Enter your choice (1-4): ").strip()
 
-        choice = input("Enter your choice (1-4): ")
-
-        if choice == "1":
-            add_task()
-
-        elif choice == "2":
-            view_tasks()
-
-        elif choice == "3":
-            delete_task()
-
-        elif choice == "4":
+        if choice == "4":
             print("Thank you for using the To-Do List!")
             break
 
+        action = actions.get(choice)
+
+        if action:
+            action()
         else:
             print("Invalid choice. Please select 1-4.")
 
 
 if __name__ == "__main__":
     main()
+
